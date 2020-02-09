@@ -1,18 +1,38 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {capitalize} from "../utils/string";
+import {Input, Button} from "react-native-elements";
 
 interface AddScreenProps {
     what: string
 }
 
 const AddScreen = (props: AddScreenProps) => {
-    return <Text style={styles.text}>{ capitalize(props.what) }</Text>;
+    const whatDisplay = capitalize(props.what);
+
+    return (
+        <View style={styles.container}>
+            <Input placeholder={whatDisplay}/>
+            <View style={styles.spacer} />
+            <Button style={styles.button}
+                title={`Add ${whatDisplay}`}
+            />
+        </View>
+    )
 };
 
 const styles = StyleSheet.create({
-    text: {
-        fontSize: 30
+    container: {
+        margin: 15,
+        flex: 1,
+        justifyContent: 'center',
+        marginBottom: 200
+    },
+    spacer: {
+        height: 20
+    },
+    button: {
+        marginHorizontal: 10
     }
 });
 
