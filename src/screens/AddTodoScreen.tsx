@@ -1,22 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import AddScreen from "./AddScreen";
-import {addList} from "../redux/actions";
+import {addTodo} from "../redux/actions";
+import {getList} from "../redux/selectors";
 
-const AddListScreen = (props) => {
-    return <AddScreen what={"list"}
-                      onAdd={props.onListAdd}
-                      onAddComplete={() => props.navigation.goBack() }
+const AddTodoScreen = ({ list, onTodoAdd, navigation}) => {
+    return <AddScreen what={"todo"}
+                      onAdd={onTodoAdd}
+                      onAddComplete={() => navigation.goBack() }
                       />
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        onListAdd: (name: string) => {
-            console.log('onListAdd', name)
-            dispatch(addList(name))
+        onTodoAdd: (name: string) => {
+            dispatch(addTodo(name, ownProps.route.params.listId))
+            ownProps.navigation.goBack()
         }
     }
 }
 
-export default connect(null, mapDispatchToProps)(AddListScreen);
+const mapStateToProps = (state, ownProps) => {
+    const list = getList(state, ownProps.route.params.listId)
+
+    return { list }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddTodoScreen);

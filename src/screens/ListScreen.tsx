@@ -3,27 +3,31 @@ import { connect } from 'react-redux';
 import {Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import {ListItem} from "react-native-elements";
+import {getList, getTodos} from "../redux/selectors";
 
 interface list {
     name: string,
     priority: number,
 }
 
-const ListsScreen = ({ lists, navigation }) => {
+const ListScreen = ({ list, todos, navigation }) => {
     navigation.setOptions({
         headerRight: () => (
-            <TouchableOpacity onPress={() => navigation.navigate('AddList')}>
-                <Entypo name="add-to-list" size={32} />
+            <TouchableOpacity onPress={() => navigation.navigate('AddTodo', {
+                listId: list.id
+            })}>
+                <Entypo name="plus" size={32} />
             </TouchableOpacity>
         ),
+        title: list.name,
     });
 
     return (<>
         <FlatList
-            data={lists}
+            data={todos}
             renderItem={({ item }) => (
                 <ListItem
-                    key={item.priority}
+                    key={item.id.toString()}
                     title={item.name}
                     bottomDivider
                 />
@@ -38,10 +42,11 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = state => {
-    const { lists } = state;
+const mapStateToProps = (state, ownProps) => {
+    const list = getList(state, ownProps.route.params.listId)
+    const todos = getTodos(state, ownProps.route.params.listId);
 
-    return { lists }
+    return { list, todos }
 };
 
-export default connect(mapStateToProps, null)(ListsScreen);
+export default connect(mapStateToProps, null)(ListScreen);

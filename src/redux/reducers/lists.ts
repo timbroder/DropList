@@ -1,14 +1,16 @@
 import {ADD_LIST, GET_LISTS} from "../actionTypes";
-import {maxPriority} from "../../utils/number";
+import {maxProp} from "../../utils/number";
 
 const initialLists = [
         {
+            id: 1,
             name: 'Tim Packing - FPO',
-            priority: 1
+            sort: 1
         },
         {
+            id: 2,
             name: 'Laura  Packing - FPO',
-            priority: 2
+            sort: 2
         }
     ];
 
@@ -21,8 +23,9 @@ export default function(state = initialLists, action) {
             return [
                 ...state,
                 {
+                    id: maxProp(state, 'id') + 1,
                     name: action.payload,
-                    priority: maxPriority(state) + 1,
+                    sort: maxProp(state, 'sort') + 1,
                 }
             ]
         }

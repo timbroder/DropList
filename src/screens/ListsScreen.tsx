@@ -23,9 +23,12 @@ const ListsScreen = ({ lists, navigation }) => {
             data={lists}
             renderItem={({ item }) => (
                 <ListItem
-                    key={item.priority}
+                    key={item.id.toString()}
                     title={item.name}
                     bottomDivider
+                    onPress={() => navigation.navigate('List', {
+                        listId: item.id
+                    })}
                 />
             )}
         />

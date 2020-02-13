@@ -3,18 +3,17 @@ import { connect } from 'react-redux';
 import AddScreen from "./AddScreen";
 import {addList} from "../redux/actions";
 
-const AddListScreen = (props) => {
+const AddListScreen = ({ onListAdd, navigation}) => {
     return <AddScreen what={"list"}
-                      onAdd={props.onListAdd}
-                      onAddComplete={() => props.navigation.goBack() }
+                      onAdd={onListAdd}
                       />
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onListAdd: (name: string) => {
-            console.log('onListAdd', name)
             dispatch(addList(name))
+            ownProps.navigation.goBack()
         }
     }
 }

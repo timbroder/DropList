@@ -23,7 +23,6 @@ const AddScreen = (props: AddScreenProps) => {
                 title={`Add ${whatDisplay}`}
                 onPress={() => {
                     props.onAdd(what);
-                    props.onAddComplete();
                 }}
             />
         </View>
