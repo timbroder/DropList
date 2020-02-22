@@ -7,7 +7,7 @@ interface AddScreenProps {
     what: string
 }
 
-const AddScreen = (props: AddScreenProps) => {
+const Add = (props: AddScreenProps) => {
     const whatDisplay = capitalize(props.what);
     const [what, setWhat] = useState('');
 
@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default AddScreen;
+export default Add;

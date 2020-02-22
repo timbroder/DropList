@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import AddScreen from "./AddScreen";
+import Add from "../components/Add";
 import {addList} from "../redux/actions";
 
 const AddListScreen = ({ onListAdd, navigation}) => {
-    return <AddScreen what={"list"}
-                      onAdd={onListAdd}
+    return <Add what={"list"}
+                onAdd={onListAdd}
                       />
 };
 

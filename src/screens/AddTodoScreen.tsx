@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import AddScreen from "./AddScreen";
+import Add from "../components/Add";
 import {addTodo} from "../redux/actions";
 import {getList} from "../redux/selectors";
 
 const AddTodoScreen = ({ list, onTodoAdd, navigation}) => {
-    return <AddScreen what={"todo"}
-                      onAdd={onTodoAdd}
-                      onAddComplete={() => navigation.goBack() }
+    return <Add what={"todo"}
+                onAdd={onTodoAdd}
+                onAddComplete={() => navigation.goBack() }
                       />
 };
 
