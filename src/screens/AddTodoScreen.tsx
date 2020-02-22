@@ -11,6 +11,12 @@ const AddTodoScreen = ({ list, onTodoAdd, navigation}) => {
                       />
 };
 
+const mapStateToProps = (state, ownProps) => {
+    const list = getList(state, ownProps.route.params.listId)
+
+    return { list }
+};
+
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onTodoAdd: (name: string) => {
@@ -19,11 +25,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         }
     }
 }
-
-const mapStateToProps = (state, ownProps) => {
-    const list = getList(state, ownProps.route.params.listId)
-
-    return { list }
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddTodoScreen);

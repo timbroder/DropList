@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { connect } from 'react-redux';
-import {Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity, FlatList, View, Animated, LayoutAnimation} from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import {ListItem} from "react-native-elements";
+import {SwipeListView} from "react-native-swipe-list-view";
+import {addTodo, deleteList, deleteTodos} from "../redux/actions";
 
 interface list {
     name: string,
     priority: number,
 }
 
-const ListsScreen = ({ lists, navigation }) => {
+const ListsScreen = ({ lists, deleteList, deleteTodos, navigation }) => {
     navigation.setOptions({
         headerRight: () => (
             <TouchableOpacity onPress={() => navigation.navigate('AddList')}>
@@ -18,12 +20,28 @@ const ListsScreen = ({ lists, navigation }) => {
         ),
     });
 
-    return (<>
-        <FlatList
+    const [deleting, setDeleting] = useState([]);
+
+    const onSwipeValueChange = swipeData => {
+        const { key } = swipeData;
+        if (Math.abs(swipeData.value) >= 250 && !deleting.includes(key)) {
+            deleteTodos(parseInt(key));
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+
+            setDeleting(deleting.concat(key))
+            deleteList(parseInt(key));
+            setDeleting(deleting.filter(item => item != key));
+        }
+    };
+
+    return lists.length <= 0
+        ? null
+        : (<>
+        <SwipeListView
             data={lists}
+            keyExtractor={(item) => item.id.toString() }
             renderItem={({ item }) => (
                 <ListItem
-                    key={item.id.toString()}
                     title={item.name}
                     bottomDivider
                     onPress={() => navigation.navigate('List', {
@@ -31,14 +49,61 @@ const ListsScreen = ({ lists, navigation }) => {
                     })}
                 />
             )}
+            renderHiddenItem={(data, rowMap) => (
+                <View style={styles.rowBack}>
+                    <View
+                        style={[
+                            styles.btn,
+                            styles.leftBtn
+                        ]}
+                    >
+                        <Entypo
+                            name="trash"
+                            size={25}
+                            color="white"
+                        />
+                    </View>
+                    <View
+                        style={[
+                            styles.btn,
+                            styles.rightBtn
+                        ]}
+                    >
+                        <Entypo
+                            name="trash"
+                            size={25}
+                            color="white"
+                        />
+                    </View>
+                </View>
+            )}
+            onSwipeValueChange={onSwipeValueChange}
         />
     </>);
 };
 
 const styles = StyleSheet.create({
-    text: {
-        fontSize: 30
-    }
+    rowBack: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 50,
+    },
+    btn: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 50,
+        backgroundColor: 'red',
+        flex: 1,
+    },
+    rightBtn: {
+        alignItems: 'flex-end',
+        paddingHorizontal: 15
+    },
+    leftBtn: {
+        alignItems: 'flex-start',
+        paddingHorizontal: 15
+    },
 });
 
 const mapStateToProps = state => {
@@ -47,4 +112,15 @@ const mapStateToProps = state => {
     return { lists }
 };
 
-export default connect(mapStateToProps, null)(ListsScreen);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        deleteList: (id: number) => {
+            dispatch(deleteList(id));
+        },
+        deleteTodos: (listId: number) => {
+            dispatch(deleteTodos(listId));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListsScreen);

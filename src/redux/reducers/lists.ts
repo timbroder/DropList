@@ -1,5 +1,6 @@
-import {ADD_LIST, GET_LISTS} from "../actionTypes";
+import {ADD_LIST, DELETE_LIST, GET_LISTS} from "../actionTypes";
 import {maxProp} from "../../utils/number";
+import {itemSort} from "../../utils/array";
 
 const initialLists = [
         {
@@ -27,7 +28,10 @@ export default function(state = initialLists, action) {
                     name: action.payload,
                     sort: maxProp(state, 'sort') + 1,
                 }
-            ]
+            ].sort(itemSort);
+        }
+        case DELETE_LIST: {
+            return state.filter(item => item.id != action.payload);
         }
         default:
             return state;
