@@ -1,4 +1,4 @@
-import {ADD_LIST, GET_LISTS, DELETE_LIST, ADD_TODO, DELETE_TODOS, DELETE_TODO} from "./actionTypes";
+import {ADD_LIST, GET_LISTS, DELETE_LIST, ADD_TODO, DELETE_TODOS, DELETE_TODO, TOGGLE_TODO} from "./actionTypes";
 
 export function getLists() {
     return { type: GET_LISTS }
@@ -38,6 +38,13 @@ export function deleteTodos(listId: number) {
 export function deleteTodo(todoId: number) {
     return {
         type: DELETE_TODO,
+        payload: todoId
+    }
+}
+
+export function toggleTodo(todoId: number) {
+    return {
+        type: TOGGLE_TODO,
         payload: todoId
     }
 }

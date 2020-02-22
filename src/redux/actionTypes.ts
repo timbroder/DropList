@@ -5,4 +5,5 @@ export const DELETE_LIST = "DELETE_LIST";
 export const ADD_TODO = "ADD_TODO";
 export const DELETE_TODO = "DELETE_TODO";
 export const DELETE_TODOS = "DELETE_TODOS";
+export const TOGGLE_TODO = "TOGGLE_TODO";
 

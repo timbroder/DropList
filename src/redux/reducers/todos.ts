@@ -1,6 +1,6 @@
-import {ADD_TODO, DELETE_TODO, DELETE_TODOS} from "../actionTypes";
+import {ADD_TODO, DELETE_TODO, DELETE_TODOS, TOGGLE_TODO} from "../actionTypes";
 import {maxProp} from "../../utils/number";
-import {itemSort} from "../../utils/array";
+import {itemSort, todoSort} from "../../utils/array";
 
 const initialTodos = [];
 
@@ -13,15 +13,25 @@ export default function(state = initialTodos, action) {
                     id: maxProp(state, 'id') + 1,
                     name: action.payload.name,
                     sort: maxProp(state, 'sort') + 1,
-                    listId: action.payload.listId
+                    listId: action.payload.listId,
+                    completed: false
                 }
-            ].sort(itemSort);
+            ].sort(todoSort);
         }
         case DELETE_TODOS: {
-            return state.filter(item => item.listId != action.payload);
+            return state.filter(todo => todo.listId != action.payload);
         }
         case DELETE_TODO: {
-            return state.filter(item => item.id != action.payload);
+            return state.filter(todo => todo.id != action.payload);
+        }
+        case TOGGLE_TODO: {
+            return state.map(todo =>
+                todo.id === action.payload ? {
+                    ...todo,
+                    completed: !todo.completed,
+                    sort: !todo.completed ? maxProp(state, 'sort') + 1 : todo.sort
+            } : todo
+            )
         }
         default:
             return state;

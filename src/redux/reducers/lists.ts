@@ -31,7 +31,7 @@ export default function(state = initialLists, action) {
             ].sort(itemSort);
         }
         case DELETE_LIST: {
-            return state.filter(item => item.id != action.payload);
+            return state.filter(list => list.id != action.payload);
         }
         default:
             return state;
